@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shape Maker</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f0f0f0;
+    color: #222;
+    text-align: center;
+  }
+
+  button {
+    font-size: 16px;
+    padding: 10px 16px;
+    margin: 5px;
+    cursor: pointer;
+  }
+
+  #box {
+    position: relative;
+    width: 90%;
+    max-width: 600px;
+    height: 400px;
+    margin: 20px auto;
+    background: white;
+    border: 2px solid #333;
+    overflow: hidden;
+  }
+
+  /* shapes */
+  .circle {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: red;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .rectangle {
+    position: absolute;
+    width: 90px;
+    height: 50px;
+    background: blue;
+    cursor: pointer;
+  }
+
+  .triangle {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 30px solid transparent;
+    border-right: 30px solid transparent;
+    border-bottom: 60px solid green;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<h1>Shape Maker</h1>
+<p>Click a button to add a shape. Click a shape to remove it.</p>
+
+<button onclick="addShape('circle')">Add Circle</button>
+<button onclick="addShape('rectangle')">Add Rectangle</button>
+<button onclick="addShape('triangle')">Add Triangle</button>
+
+<div id="box"></div>
+
+<script>
+  var box = document.getElementById("box");
+
+  function addShape(type) {
+    // make a new div and give it the shape's class
+    var shape = document.createElement("div");
+    shape.className = type;
+
+    // pick a random spot inside the box
+    var x = Math.random() * (box.clientWidth - 90);
+    var y = Math.random() * (box.clientHeight - 60);
+    shape.style.left = x + "px";
+    shape.style.top = y + "px";
+
+    // when the shape is clicked, remove it
+    shape.onclick = function () {
+      shape.remove();
+    };
+
+    box.appendChild(shape);
+  }
+</script>
+
+</body>
+</html>
