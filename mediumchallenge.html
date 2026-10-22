@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MEDIUM CHALLENGE</title>
+</head>
+<body>
+ <style>
+  .highlight {
+    background-color: yellow;
+    font-size: 24px;
+  }
+</style>
+
+<p id="myText">Click the button to highlight me.</p>
+<button id="highlightBtn">Highlight</button>
+
+<script>
+  document.getElementById("highlightBtn").addEventListener("click", () => {
+    document.getElementById("myText").classList.add("highlight");
+  });
+</script>
+</body>
+</html>
