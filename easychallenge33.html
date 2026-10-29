@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Name Form</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 2rem;
+    }
+    .field {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    input[aria-invalid="true"] {
+      border: 2px solid #c0392b;
+    }
+    #name-error {
+      color: #c0392b;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <form id="name-form" novalidate>
+    <div class="field">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" autocomplete="name"
+             aria-describedby="name-error" aria-invalid="false">
+      <span id="name-error" role="alert"></span>
+    </div>
+  </form>
+
+  <script>
+    const input = document.getElementById('name');
+    const error = document.getElementById('name-error');
+
+    // \p{L} matches any letter in any language
+    const nonLetter = /[^\p{L}]/u;
+
+    input.addEventListener('input', () => {
+      const invalid = nonLetter.test(input.value);
+      error.textContent = invalid ? 'Please use letters only.' : '';
+      input.setAttribute('aria-invalid', invalid);
+    });
+
+    document.getElementById('name-form').addEventListener('submit', (e) => {
+      if (nonLetter.test(input.value)) e.preventDefault();
+    });
+  </script>
+</body>
+</html>
