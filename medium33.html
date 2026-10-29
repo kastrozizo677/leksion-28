@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Name and Age Form</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 2rem;
+    }
+    .field {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .field label {
+      min-width: 3.5rem;
+    }
+    input[aria-invalid="true"] {
+      border: 2px solid #c0392b;
+    }
+    .error {
+      color: #c0392b;
+      font-size: 0.9rem;
+    }
+    #success {
+      color: #1e8449;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <form id="main-form" novalidate>
+    <div class="field">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" autocomplete="name"
+             aria-describedby="name-error" aria-invalid="false">
+      <span id="name-error" class="error" role="alert"></span>
+    </div>
+
+    <div class="field">
+      <label for="age">Age:</label>
+      <input type="text" id="age" name="age" inputmode="numeric"
+             aria-describedby="age-error" aria-invalid="false">
+      <span id="age-error" class="error" role="alert"></span>
+    </div>
+
+    <button type="submit">Submit</button>
+    <p id="success" role="status"></p>
+  </form>
+
+  <script>
+    const form = document.getElementById('main-form');
+    const success = document.getElementById('success');
+
+    // Each field: its input, its error element, a validator returning an
+    // error message (or '' when valid).
+    const fields = [
+      {
+        input: document.getElementById('name'),
+        error: document.getElementById('name-error'),
+        validate(value) {
+          if (value === '') return 'Name is required.';
+          // \p{L} matches any letter in any language
+          if (/[^\p{L}]/u.test(value)) return 'Please use letters only.';
+          return '';
+        }
+      },
+      {
+        input: document.getElementById('age'),
+        error: document.getElementById('age-error'),
+        validate(value) {
+          if (value === '') return 'Age is required.';
+          if (/\D/.test(value)) return 'Please use numbers only.';
+          return '';
+        }
+      }
+    ];
+
+    function check(field) {
+      const message = field.validate(field.input.value);
+      field.error.textContent = message;
+      field.input.setAttribute('aria-invalid', message !== '');
+      return message === '';
+    }
+
+    // Live feedback while typing. Empty fields stay quiet until submit.
+    fields.forEach((field) => {
+      field.input.addEventListener('input', () => {
+        success.textContent = '';
+        if (field.input.value === '') {
+          field.error.textContent = '';
+          field.input.setAttribute('aria-invalid', 'false');
+        } else {
+          check(field);
+        }
+      });
+    });
+
+    // Validate both fields on submission.
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      // Check every field (no short-circuit) so all errors show at once.
+      const allValid = fields.map(check).every(Boolean);
+      success.textContent = allValid ? 'Form submitted successfully.' : '';
+    });
+  </script>
+</body>
+</html>
