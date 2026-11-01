@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simple Form</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    .row { margin-bottom: 12px; }
+    .error { color: red; margin-left: 8px; }
+  </style>
+</head>
+<body>
+
+  <form id="userForm">
+    <div class="row">
+      <label>Name: <input type="text" id="name"></label>
+      <span id="nameError" class="error"></span>
+    </div>
+
+    <div class="row">
+      <label>Age: <input type="text" id="age"></label>
+      <span id="ageError" class="error"></span>
+    </div>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('userForm');
+    const nameInput = document.getElementById('name');
+    const ageInput = document.getElementById('age');
+    const nameError = document.getElementById('nameError');
+    const ageError = document.getElementById('ageError');
+
+    function validateName() {
+      const val = nameInput.value.trim();
+
+      if (/[^a-zA-Z\s]/.test(nameInput.value)) {
+        nameError.textContent = 'Only letters allowed.';
+        return false;
+      }
+      if (val.length < 2) {
+        nameError.textContent = 'Name must be at least 2 characters.';
+        return false;
+      }
+
+      nameError.textContent = '';
+      return true;
+    }
+
+    function validateAge() {
+      const val = ageInput.value.trim();
+
+      if (/\D/.test(val)) {
+        ageError.textContent = 'Only numbers allowed.';
+        return false;
+      }
+
+      const num = Number(val);
+
+      if (val === '' || isNaN(num) || num < 0 || num > 120) {
+        ageError.textContent = 'Age must be between 0 and 120.';
+        return false;
+      }
+
+      ageError.textContent = '';
+      return true;
+    }
+
+    // Live validation
+    nameInput.addEventListener('input', validateName);
+    ageInput.addEventListener('input', validateAge);
+
+    // Submit validation
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const isNameValid = validateName();
+      const isAgeValid = validateAge();
+
+      if (isNameValid && isAgeValid) {
+        const nameVal = nameInput.value.trim();
+        const ageNum = Number(ageInput.value.trim());
+        alert(`Submitted! Name: ${nameVal}, Age: ${ageNum}`);
+      }
+    });
+  </script>
+
+</body>
+</html>

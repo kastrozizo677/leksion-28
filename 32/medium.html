@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simple Form</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    .row { margin-bottom: 12px; }
+    .error { color: red; margin-left: 8px; }
+  </style>
+</head>
+<body>
+
+  <form id="userForm">
+    <div class="row">
+      <label>Name: <input type="text" id="name"></label>
+      <span id="nameError" class="error"></span>
+    </div>
+
+    <div class="row">
+      <label>Age: <input type="text" id="age"></label>
+      <span id="ageError" class="error"></span>
+    </div>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('userForm');
+    const nameInput = document.getElementById('name');
+    const ageInput = document.getElementById('age');
+    const nameError = document.getElementById('nameError');
+    const ageError = document.getElementById('ageError');
+
+    // Live validation
+    nameInput.addEventListener('input', () => {
+      const hasNonLetters = /[^a-zA-Z\s]/.test(nameInput.value);
+      nameError.textContent = hasNonLetters ? 'Only letters allowed.' : '';
+    });
+
+    ageInput.addEventListener('input', () => {
+      const hasNonDigits = /\D/.test(ageInput.value);
+      ageError.textContent = hasNonDigits ? 'Only numbers allowed.' : '';
+    });
+
+    // Submit validation
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const nameVal = nameInput.value.trim();
+      const ageVal = ageInput.value.trim();
+      const ageNum = Number(ageVal); // Convert string to number
+
+      let valid = true;
+
+      if (!nameVal || /[^a-zA-Z\s]/.test(nameVal)) {
+        nameError.textContent = 'Enter a valid name.';
+        valid = false;
+      }
+
+      if (!ageVal || isNaN(ageNum) || /\D/.test(ageVal)) {
+        ageError.textContent = 'Enter a valid age.';
+        valid = false;
+      }
+
+      if (valid) {
+        alert(`Submitted! Name: ${nameVal}, Age: ${ageNum}`);
+      }
+    });
+  </script>
+
+</body>
+</html>
