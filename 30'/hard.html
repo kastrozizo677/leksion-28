@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Alarm Clock</title>
+</head>
+<body>
+
+    <!-- Current Time Display -->
+    <h2>Current Time</h2>
+    <div id="clock">00:00:00</div>
+
+    <hr>
+
+    <!-- Set Alarm Section -->
+    <h2>Set Alarm</h2>
+    <label for="alarmTime">Alarm Time:</label>
+    <input type="time" id="alarmTime" step="1">
+    <button onclick="setAlarm()">Set Alarm</button>
+    <button onclick="clearAlarm()">Clear Alarm</button>
+
+    <p id="alarmStatus">No alarm set.</p>
+    <h3 id="alarmAlert" style="color: red;"></h3>
+
+    <script>
+        let alarmTime = null;
+
+        // Function to update the clock every second
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            const currentTimeStr = `${hours}:${minutes}:${seconds}`;
+            document.getElementById("clock").innerText = currentTimeStr;
+
+            // Check if current time matches the alarm time
+            if (alarmTime && currentTimeStr === alarmTime) {
+                document.getElementById("alarmAlert").innerText = "ALARM! Time is up!";
+                alert("ALARM! The time is " + currentTimeStr);
+                clearAlarm();
+            }
+        }
+
+        // Set the alarm
+        function setAlarm() {
+            const input = document.getElementById("alarmTime").value;
+            if (!input) {
+                alert("Please select a time first.");
+                return;
+            }
+
+            // Standardize format to HH:MM:SS
+            alarmTime = input.length === 5 ? input + ":00" : input;
+            document.getElementById("alarmStatus").innerText = "Alarm set for: " + alarmTime;
+            document.getElementById("alarmAlert").innerText = "";
+        }
+
+        // Clear the alarm
+        function clearAlarm() {
+            alarmTime = null;
+            document.getElementById("alarmStatus").innerText = "No alarm set.";
+            document.getElementById("alarmTime").value = "";
+        }
+
+        // Update clock immediately, then every 1000ms
+        updateClock();
+        setInterval(updateClock, 1000);
+    </script>
+
+</body>
+</html>
