@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Name List & Search</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    input {
+      padding: 8px;
+      margin-bottom: 10px;
+      width: 70%;
+    }
+    button {
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+    li {
+      padding: 6px;
+      margin: 4px 0;
+      border-radius: 4px;
+    }
+    /* Highlight style for matched names */
+    .highlight {
+      background-color: #ffeb3b;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Name Manager</h2>
+
+  <!-- Form to add a name -->
+  <form id="nameForm">
+    <input type="text" id="nameInput" placeholder="Enter a name" required>
+    <button type="submit">Add</button>
+  </form>
+
+  <hr>
+
+  <!-- Search input -->
+  <input type="text" id="searchInput" placeholder="Search a name to highlight...">
+
+  <!-- Display list -->
+  <ul id="nameList"></ul>
+
+  <script>
+    // 1. Array to store all names
+    const names = [];
+
+    const nameForm = document.getElementById('nameForm');
+    const nameInput = document.getElementById('nameInput');
+    const searchInput = document.getElementById('searchInput');
+    const nameList = document.getElementById('nameList');
+
+    // 2. Function to render the list using a loop
+    function renderList() {
+      nameList.innerHTML = ''; // Clear previous items
+      const query = searchInput.value.trim().toLowerCase();
+
+      // Loop through the names array
+      for (let i = 0; i < names.length; i++) {
+        const li = document.createElement('li');
+        li.textContent = names[i];
+
+        // Check if the current name matches the search query
+        if (query !== '' && names[i].toLowerCase().includes(query)) {
+          li.classList.add('highlight');
+        }
+
+        nameList.appendChild(li);
+      }
+    }
+
+    // 3. Handle adding a new name
+    nameForm.addEventListener('submit', function(event) {
+      event.preventDefault(); // Stop page reload
+
+      const newName = nameInput.value.trim();
+      if (newName) {
+        names.push(newName); // Add name to array
+        nameInput.value = ''; // Reset input field
+        renderList(); // Re-render the list
+      }
+    });
+
+    // 4. Handle searching in real-time
+    searchInput.addEventListener('input', function() {
+      renderList();
+    });
+  </script>
+
+</body>
+</html>
